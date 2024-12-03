@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Number Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="game">
+        <h1>Guess the Number</h1>
+        <input type="number" id="guess" min="1" max="10">
+        <button onclick="makeGuess()">Guess</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        function makeGuess() {
+            const guess = parseInt(document.getElementById('guess').value);
+            fetch('/guess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ guess: guess }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const result = document.getElementById('result');
+                    if (data.correct) {
+                        result.textContent = 'Correct!';
+                    } else {
+                        result.textContent = `Wrong! It was ${data.secret}`;
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>
